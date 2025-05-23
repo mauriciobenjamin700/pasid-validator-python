@@ -1,5 +1,18 @@
-def load_config(config_path):
-    import configparser
+from typing import Dict, Any
+import configparser
+
+def load_config(config_path: str) -> Dict[str, Any]:
+    """
+    Carrega as configurações do sistema a partir de um arquivo INI.
+
+    Args:
+        config_path (str): Caminho para o arquivo de configuração (.ini).
+
+    Returns:
+        Dict[str, Any]: Dicionário com as configurações carregadas, incluindo parâmetros gerais,
+            listas de valores de MRT e desvio padrão, e configurações de serviços variáveis.
+    """
+    
 
     config = configparser.ConfigParser()
     config.read(config_path)
