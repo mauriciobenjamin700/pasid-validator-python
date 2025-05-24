@@ -3,9 +3,9 @@ import threading
 import time
 
 class Service:
-    def __init__(self, listen_port: int, service_time: float):
+    def __init__(self, listen_port: int, service_time_ms: float):
         self.listen_port = listen_port
-        self.service_time = service_time
+        self.service_time_ms = service_time_ms
 
     def start(self):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,6 +18,6 @@ class Service:
 
     def handle_client(self, client_sock):
         data = client_sock.recv(1024)
-        time.sleep(self.service_time / 1000.0)  # Simula tempo de serviço em ms
+        time.sleep(self.service_time_ms / 1000.0)  # Simula tempo de serviço em ms
         client_sock.sendall(data)
         client_sock.close()
