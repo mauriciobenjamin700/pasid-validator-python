@@ -1,23 +1,23 @@
 Starting source
-Recebido no ciclo 0: 0;1;1748050119211
 Recebido no ciclo 0: 
 Recebido no ciclo 0: 
-Recebido no ciclo 0: 0;3;1748050119412
 Recebido no ciclo 0: 
-Recebido no ciclo 0: 0;5;1748050119614
 Recebido no ciclo 0: 
-Recebido no ciclo 0: 0;7;1748050119815
 Recebido no ciclo 0: 
-Recebido no ciclo 0: 0;9;1748050120016
+Recebido no ciclo 0: 
+Recebido no ciclo 0: 
+Recebido no ciclo 0: 
+Recebido no ciclo 0: 
+Recebido no ciclo 0: 
 Ciclo 0 finalizado.
 Recebido no ciclo 1: 
-Recebido no ciclo 1: 1;2;1748050120317
 Recebido no ciclo 1: 
 Recebido no ciclo 1: 
-Recebido no ciclo 1: 1;4;1748050120518
-Recebido no ciclo 1: 1;6;1748050120719
 Recebido no ciclo 1: 
 Recebido no ciclo 1: 
-Recebido no ciclo 1: 1;8;1748050120920
-Recebido no ciclo 1: 1;10;1748050121121
+Recebido no ciclo 1: 
+Recebido no ciclo 1: 
+Recebido no ciclo 1: 
+Recebido no ciclo 1: 
+Recebido no ciclo 1: 
 Ciclo 1 finalizado.

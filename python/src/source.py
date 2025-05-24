@@ -3,12 +3,52 @@ import threading
 import time
 from typing import List, Dict, Any
 
-class Source:
+from src.abstract_proxy import AbstractProxy
+from src.utils import get_current_timestamp
+
+class Source(AbstractProxy):
     """
     Classe responsável por gerar e enviar mensagens para o sistema distribuído.
+
+    Esta classe pode operar em dois estágios:
+    1. **Model Feeding Stage**: Envia mensagens de alimentação do modelo.
+    2. **Validation Stage**: Envia mensagens de validação, configurando o número de serviços e aguardando respostas.
+    Args:
+        config (Dict[str, Any]): Configurações para a classe Source, incluindo:
+            - model_feeding_stage (bool): Indica se está no estágio de alimentação do modelo.
+            - arrival_delay (int): Atraso em milissegundos entre o envio de mensagens.
+            - max_considered_messages_expected (int): Número máximo de mensagens consideradas por ciclo.
+            - qtd_services (List[int]): Lista com a quantidade de serviços disponíveis.
+            - target_ip (str): IP do destino para envio das mensagens.
+            - target_port (int): Porta do destino para envio das mensagens.
+        Esta classe é responsável por enviar mensagens para um servidor de destino,
+        gerenciar ciclos de envio e receber respostas, registrando logs das operações.
+        Além disso, ela mantém o controle do estado dos ciclos e mensagens consideradas.
+
+    Attributes:
+        model_feeding_stage (bool): Indica se está no estágio de alimentação do modelo.
+        arrival_delay (int): Atraso em milissegundos entre o envio de mensagens.
+        max_considered_messages_expected (int): Número máximo de mensagens consideradas por ciclo.
+        source_current_index_message (int): Índice atual da mensagem a ser enviada.
+        considered_messages (List[str]): Lista de mensagens consideradas.
+        qtd_services (List[int]): Lista com a quantidade de serviços disponíveis.
+        cycles_completed (List[bool]): Lista indicando se os ciclos foram completados.
+        dropp_count (int): Contador de mensagens descartadas.
+        target_ip (str): IP do destino para envio das mensagens.
+        target_port (int): Porta do destino para envio das mensagens.
+
+    Methods:
+        log(message: str): Registra uma mensagem no log e no console.
+        run(): Inicia o processo de envio de mensagens.
+        send_message_feeding_stage(): Envia mensagens no estágio de alimentação do modelo.
+        send_messages_validation_stage(): Envia mensagens no estágio de validação.
+        send_message_to_configure_server(config_message: str): Envia uma mensagem de configuração ao servidor.
+        send(msg: str): Envia uma mensagem para o destino especificado.
+        send_and_receive(msg: str, cycle: int): Envia uma mensagem e aguarda a resposta do servidor.
     """
 
     def __init__(self, config: Dict[str, Any]) -> None:
+        super().__init__(config.get("log_file", "log.txt"))
         self.model_feeding_stage: bool = config.get("model_feeding_stage", False)
         self.arrival_delay: int = config.get("arrival_delay", 0)
         self.max_considered_messages_expected: int = config.get("max_considered_messages_expected", 10)
@@ -17,21 +57,24 @@ class Source:
         self.qtd_services: List[int] = config.get("qtd_services", [])
         self.cycles_completed: List[bool] = [False] * len(self.qtd_services)
         self.dropp_count: int = 0
-        self.log_file: str = "log.txt"
         self.target_ip: str = config.get("target_ip", "localhost")
         self.target_port: int = config.get("target_port", 2000)
-        self.init_log_file()
-
-    def init_log_file(self) -> None:
-        with open(self.log_file, 'w') as f:
-            f.write("")
-
-    def log(self, message: str) -> None:
-        print(message)
-        with open(self.log_file, 'a') as f:
-            f.write(message + "\n")
 
     def run(self) -> None:
+        """
+        Inicia o processo de envio de mensagens.
+        Dependendo do estágio (alimentação do modelo ou validação),
+        chama o método apropriado para enviar mensagens.
+        O método `send_message_feeding_stage` é chamado se o estágio for de alimentação do modelo,
+        enquanto `send_messages_validation_stage` é chamado para o estágio de validação.
+        O método `send_messages_validation_stage` também configura o número de serviços
+        e aguarda as respostas dos serviços.
+
+        Args:
+            None
+        Returns:
+            None
+        """
         self.log("Starting source")
         if self.model_feeding_stage:
             self.send_message_feeding_stage()
@@ -39,23 +82,54 @@ class Source:
             self.send_messages_validation_stage()
 
     def send_message_feeding_stage(self) -> None:
+        """
+        Envia mensagens no estágio de alimentação do modelo.
+        Neste estágio, as mensagens são enviadas em um loop,
+        com um atraso definido entre cada envio.
+        O método `send` é chamado para enviar as mensagens.
+        O índice da mensagem é incrementado a cada envio.
+        O método `get_current_timestamp` é utilizado para obter o timestamp atual
+        e incluir na mensagem enviada.
+
+        Args:
+            None
+        Returns:
+            None
+        """
         self.log("Model Feeding Stage Started")
         for _ in range(10):
-            msg = f"1;{self.source_current_index_message};{self.get_current_time()}"
+            msg = f"1;{self.source_current_index_message};{get_current_timestamp()}"
             self.send(msg)
             self.source_current_index_message += 1
             time.sleep(self.arrival_delay / 1000.0)
 
     def send_messages_validation_stage(self) -> None:
+        """
+        Envia mensagens no estágio de validação.
+        Neste estágio, as mensagens são enviadas em ciclos,
+        com um atraso definido entre cada envio.
+        O método `send_message_to_configure_server` é chamado para enviar a configuração do servidor.
+        O método `send_and_receive` é chamado para enviar mensagens e aguardar as respostas.
+        O índice da mensagem é incrementado a cada envio.
+        O método `get_current_timestamp` é utilizado para obter o timestamp atual
+        e incluir na mensagem enviada.
+
+        Args:
+            None
+        Returns:
+            None
+        """
         for cycle, qts in enumerate(self.qtd_services):
             self.source_current_index_message = 1
             self.considered_messages.clear()
             config_message = f"config;{qts}"
             self.send_message_to_configure_server(config_message)
 
-            threads = []
+            start_time = time.time()
+            timeout = 10  # segundos
+            threads:list[threading.Thread] = []
             for _ in range(self.max_considered_messages_expected):
-                msg = f"{cycle};{self.source_current_index_message};{self.get_current_time()}"
+                msg = f"{cycle};{self.source_current_index_message};{get_current_timestamp()}"
                 t = threading.Thread(target=self.send_and_receive, args=(msg, cycle))
                 t.start()
                 threads.append(t)
@@ -63,16 +137,38 @@ class Source:
                 time.sleep(self.arrival_delay / 1000.0)
 
             for t in threads:
-                t.join()
+                t.join(timeout=max(0, timeout - (time.time() - start_time)))
 
+            # Após timeout, registrando mensagens consideradas
             self.cycles_completed[cycle] = True
             self.log(f"Ciclo {cycle} finalizado.")
 
     def send_message_to_configure_server(self, config_message: str) -> None:
+        """
+        Envia uma mensagem de configuração ao servidor.
+        Esta mensagem é utilizada para configurar o número de serviços disponíveis
+        e o estado do ciclo atual.
+
+        Args:
+            config_message (str): Mensagem de configuração a ser enviada.
+        Returns:
+            None
+        """
         self.send(config_message)
 
     def send(self, msg: str) -> None:
-        """Envia uma mensagem para o destino."""
+        """
+        Envia uma mensagem para o destino especificado.
+        O método utiliza um socket TCP para enviar a mensagem.
+        O IP e a porta do destino são definidos nas configurações da classe.
+        O método `get_current_timestamp` é utilizado para obter o timestamp atual
+        e incluir na mensagem enviada.
+
+        Args:
+            msg (str): Mensagem a ser enviada.
+        Returns:
+            None
+        """
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((self.target_ip, self.target_port))
@@ -81,19 +177,22 @@ class Source:
             self.log(f"Erro ao enviar mensagem: {e}")
 
     def send_and_receive(self, msg: str, cycle: int) -> None:
-        """Envia uma mensagem e aguarda a resposta."""
+        """
+        Envia uma mensagem e aguarda a resposta.
+
+        Args:
+            msg (str): Mensagem a ser enviada.
+            cycle (int): Ciclo atual de envio.
+        Returns:
+            None
+        """
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((self.target_ip, self.target_port))
                 s.sendall(msg.encode())
                 response = s.recv(1024).decode()
+                # Armazena a mensagem recebida
                 self.considered_messages.append(response)
                 self.log(f"Recebido no ciclo {cycle}: {response}")
         except Exception as e:
             self.log(f"Erro ao enviar/receber mensagem: {e}")
-
-    def get_current_time(self) -> int:
-        return int(time.time() * 1000)
-
-    def close_log(self) -> None:
-        pass

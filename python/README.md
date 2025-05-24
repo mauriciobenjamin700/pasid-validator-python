@@ -50,6 +50,14 @@ variatedServerLoadBalancerPort = 3000
 qtdServices = 1,2
 ```
 
+## Resultados
+
+As mensagens entre os componentes gerará este resultado, onde cada componente adiciona seu timestamp ao final.
+
+```bash
+ciclo;id;T_envio;T_chegada_LB;T_saida_LB;T_chegada_SRV;T_saida_SRV
+```
+
 ## Como Executar
 
 Abra **três terminais** (ou mais) e execute cada componente separadamente:
@@ -59,28 +67,28 @@ Abra **três terminais** (ou mais) e execute cada componente separadamente:
 Cada serviço escuta em uma porta diferente. Exemplo para dois serviços
 
 ```bash
-python src/main.py service 3000 100
-python src/main.py service 3001 100
+python3 main.py service 3000 100
+python3 main.py service 3001 100
 ```
 
-*(O último argumento é o tempo de serviço em ms)*
+*(O último argumento é o tempo de serviço em ms):*
 
 ### 2. Inicie o LoadBalancer
 
 O LoadBalancer encaminha as requisições para os serviços configurados:
 
 ```bash
-python src/main.py load_balancer
+python3 main.py load_balance
 ```
 
-*(Por padrão, encaminha para os serviços nas portas 3000 e 3001)*
+*(Por padrão, encaminha para os serviços nas portas 3000 e 3001):*
 
 ### 3. Inicie o Source
 
 O Source lê as configurações e inicia o envio de requisições:
 
 ```bash
-python src/main.py source
+python3 main.py source
 ```
 
 ## Fluxo do Sistema
