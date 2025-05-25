@@ -70,11 +70,11 @@ A imagem abaixo mostra o layout do projeto.
 
 ![project layot](./images/project-layout.png)
 
-Vamos focar na pasta tests. Aqui você encontra as pastas model e validation. Primeiro observe model, onde temos o modelo xml em si e a classe MercuryCall_Services que executa o modelo e gera gráficos na pasta graphs_services. 
+Vamos focar na pasta tests. Aqui você encontra as pastas model e validation. Primeiro observe model, onde temos o modelo xml em si e a classe MercuryCall_Services que executa o modelo e gera gráficos na pasta graphs_services.
 
 **Você não irá usar o conteúdo da pasta model, então você pode apagá-la.**
 
-A pasta validation é onde executa o experimento em si, a qual você irá usar. A classe LocalTest_Services lê os três arquivos properties e executa a validação. 
+A pasta validation é onde executa o experimento em si, a qual você irá usar. A classe LocalTest_Services lê os três arquivos properties e executa a validação.
 
 Aqui está uma explicação do que esses tipos de arquivos representam e como eles são usados no contexto de sistemas distribuídos e balanceadores de carga:
 

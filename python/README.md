@@ -60,36 +60,7 @@ ciclo;id;T_envio;T_chegada_LB;T_saida_LB;T_chegada_SRV;T_saida_SRV
 
 ## Como Executar
 
-Abra **três terminais** (ou mais) e execute cada componente separadamente:
-
-### 1. Inicie os serviços (Service)
-
-Cada serviço escuta em uma porta diferente. Exemplo para dois serviços
-
-```bash
-python3 main.py service 3000 100
-python3 main.py service 3001 100
-```
-
-*(O último argumento é o tempo de serviço em ms):*
-
-### 2. Inicie o LoadBalancer
-
-O LoadBalancer encaminha as requisições para os serviços configurados:
-
-```bash
-python3 main.py load_balance
-```
-
-*(Por padrão, encaminha para os serviços nas portas 3000 e 3001):*
-
-### 3. Inicie o Source
-
-O Source lê as configurações e inicia o envio de requisições:
-
-```bash
-python3 main.py source
-```
+Use ``docker compose up --build` e aguarde os logs para ver os resultados
 
 ## Fluxo do Sistema
 

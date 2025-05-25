@@ -4,6 +4,7 @@ import threading
 import time
 
 from src.abstract_proxy import AbstractProxy
+from src.ia import IAService
 from src.utils import add_timestamp_to_message
 
 class Service(AbstractProxy):
@@ -23,6 +24,7 @@ class Service(AbstractProxy):
         self.service_time_ms = service_time_ms
         self.queue = Queue()
         self.max_queue_size = max_queue_size
+        self.ia_service = IAService()
 
     def start(self):
         """
@@ -83,7 +85,9 @@ class Service(AbstractProxy):
 
         print(f"Processing message: {data}")
 
-        time.sleep(self.service_time_ms / 1000.0)  # Simula tempo de serviço em ms
+        print(
+            self.ia_service.ask("Por que sistemas distribuídos são complexos?")
+        )
 
         # Adiciona timestamp de envio à mensagem
         data = add_timestamp_to_message(data)
