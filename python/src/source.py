@@ -122,7 +122,7 @@ class Source(AbstractProxy):
         for cycle, qts in enumerate(self.qtd_services):
             self.source_current_index_message = 1
             self.considered_messages.clear()
-            config_message = f"config;{qts}"
+            config_message = "config;" + ",".join([f"localhost:{3000 + i}" for i in range(qts)])
             self.send_message_to_configure_server(config_message)
 
             start_time = time.time()

@@ -67,7 +67,7 @@ class LoadBalancer(AbstractProxy):
             if data.startswith("config;"):
                 # Exemplo: config;localhost:3000,localhost:3001
                 services = data.split(";")[1].split(",")
-                self.service_addresses = [tuple(addr.split(":")) for addr in services]
+                self.service_addresses = [(addr.split(":")[0], int(addr.split(":")[1])) for addr in services]
                 client_sock.sendall("ok".encode())
                 client_sock.close()
                 return
@@ -88,7 +88,7 @@ class LoadBalancer(AbstractProxy):
                     # Envia a mensagem para o service
                     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         s.connect((ip, port))
-                        s.sendall(data)
+                        s.sendall(data.encode())
                         response = s.recv(1024)
                     client_sock.sendall(response)
                     break

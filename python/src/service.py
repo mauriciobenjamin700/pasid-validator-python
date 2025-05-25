@@ -56,6 +56,8 @@ class Service(AbstractProxy):
             None
         """
         data = client_sock.recv(1024).decode()
+
+        print(f"Received message: {data}")
         
         # Verifica se a mensagem é "ping"
         if data == "ping":
@@ -76,12 +78,15 @@ class Service(AbstractProxy):
         # Adiciona timestamp de chegada à mensagem
         data = add_timestamp_to_message(data)
 
-        data = client_sock.recv(1024)
+        print(f"Processing message: {data}")
+
         time.sleep(self.service_time_ms / 1000.0)  # Simula tempo de serviço em ms
 
         # Adiciona timestamp de envio à mensagem
         data = add_timestamp_to_message(data)
 
+        print(f"Sending message: {data}")
+
         # Envia a mensagem de volta ao cliente
-        client_sock.sendall(data)
+        client_sock.sendall(data.encode())
         client_sock.close()
