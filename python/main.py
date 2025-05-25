@@ -25,6 +25,7 @@ def start_source():
     source.run()
 
 def start_load_balancer(
+    listen_port: int = 2000,
     service_addresses: list[tuple[str, int]] = [
         ("localhost", 3000), 
         ("localhost", 3001)
@@ -42,7 +43,7 @@ def start_load_balancer(
         None
     """
 
-    lb = LoadBalancer(listen_port=2000, service_addresses=service_addresses)
+    lb = LoadBalancer(listen_port=listen_port, service_addresses=service_addresses)
     lb.start()
 
 def start_service(port, service_time_ms):
@@ -60,7 +61,17 @@ if __name__ == "__main__":
     if role == "source":
         start_source()
     elif role == "load_balance":
-        start_load_balancer()
+        listen_port = int(sys.argv[2])
+        services = []
+        if len(sys.argv) > 3:
+        # Exemplo: "service1:3000,service2:3001"
+            for s in sys.argv[3].split(","):
+                host, port = s.split(":")
+                services.append((host, int(port)))
+        start_load_balancer(
+            listen_port=listen_port,
+            service_addresses=services if services else [("localhost", 3000), ("localhost", 3001)]
+            )
     elif role == "service":
         if len(sys.argv) < 4:
             print("Uso para service: python main.py service <porta> <service_time_ms>")

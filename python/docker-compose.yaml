@@ -1,0 +1,70 @@
+services:
+  source:
+    build: .
+    command: python3 main.py source
+    container_name: source
+    depends_on:
+      - loadbalancer1
+      - loadbalancer2
+    networks:
+      - pasidnet
+
+  loadbalancer1:
+    build: .
+    command: python3 main.py load_balancer 2000 "service1:3000,service2:3001"
+    container_name: loadbalancer1
+    depends_on:
+      - service1
+      - service2
+    networks:
+      - pasidnet
+
+  loadbalancer2:
+    build: .
+    command: python3 main.py load_balancer 2100 "service3:3100,service4:3101"
+    container_name: loadbalancer2
+    depends_on:
+      - service3
+      - service4
+    networks:
+      - pasidnet
+
+  service1:
+    build: .
+    command: python3 main.py service 3000 100
+    container_name: service1
+    networks:
+      - pasidnet
+    ports:
+      - "3000:3000"
+
+  service2:
+    build: .
+    command: python3 main.py service 3001 100
+    container_name: service2
+    networks:
+      - pasidnet
+    ports:
+      - "3001:3001"
+
+  service3:
+    build: .
+    command: python3 main.py service 3100 100
+    container_name: service3
+    networks:
+      - pasidnet
+    ports:
+      - "3100:3100"
+
+  service4:
+    build: .
+    command: python3 main.py service 3101 100
+    container_name: service4
+    networks:
+      - pasidnet
+    ports:
+      - "3101:3101"
+
+networks:
+  pasidnet:
+    driver: bridge

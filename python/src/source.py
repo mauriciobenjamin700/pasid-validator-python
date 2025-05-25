@@ -59,6 +59,8 @@ class Source(AbstractProxy):
         self.dropp_count: int = 0
         self.target_ip: str = config.get("target_ip", "localhost")
         self.target_port: int = config.get("target_port", 2000)
+        self.loadbalancer_addresses = config.get('loadbalancer_addresses', [])
+
 
     def run(self) -> None:
         """
@@ -122,15 +124,23 @@ class Source(AbstractProxy):
         for cycle, qts in enumerate(self.qtd_services):
             self.source_current_index_message = 1
             self.considered_messages.clear()
-            config_message = "config;" + ",".join([f"localhost:{3000 + i}" for i in range(qts)])
-            self.send_message_to_configure_server(config_message)
 
+            # Distribui as mensagens entre os load balancers
+            num_balancers = len(self.loadbalancer_addresses)
             start_time = time.time()
             timeout = 10  # segundos
-            threads:list[threading.Thread] = []
-            for _ in range(self.max_considered_messages_expected):
+            threads: list[threading.Thread] = []
+
+            for i in range(self.max_considered_messages_expected):
+                # Escolhe o load balancer de forma round-robin
+                lb_ip, lb_port = self.loadbalancer_addresses[i % num_balancers]
+
+                # Configuração: envie para o load balancer correspondente
+                config_message = "config;" + ",".join([f"{lb_ip}:{3000 + j}" for j in range(qts)])
+                self.send_message_to_configure_server(config_message, lb_ip, lb_port)
+
                 msg = f"{cycle};{self.source_current_index_message};{get_current_timestamp()}"
-                t = threading.Thread(target=self.send_and_receive, args=(msg, cycle))
+                t = threading.Thread(target=self.send_and_receive_to_lb, args=(lb_ip, lb_port, msg, cycle))
                 t.start()
                 threads.append(t)
                 self.source_current_index_message += 1
@@ -139,22 +149,16 @@ class Source(AbstractProxy):
             for t in threads:
                 t.join(timeout=max(0, timeout - (time.time() - start_time)))
 
-            # Após timeout, registrando mensagens consideradas
             self.cycles_completed[cycle] = True
             self.log(f"Ciclo {cycle} finalizado.")
 
-    def send_message_to_configure_server(self, config_message: str) -> None:
-        """
-        Envia uma mensagem de configuração ao servidor.
-        Esta mensagem é utilizada para configurar o número de serviços disponíveis
-        e o estado do ciclo atual.
-
-        Args:
-            config_message (str): Mensagem de configuração a ser enviada.
-        Returns:
-            None
-        """
-        self.send(config_message)
+    def send_message_to_configure_server(self, config_message: str, ip: str, port: int) -> None:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((ip, port))
+                s.sendall(config_message.encode())
+        except Exception as e:
+            self.log(f"Erro ao enviar mensagem de configuração para {ip}:{port}: {e}")
 
     def send(self, msg: str) -> None:
         """
@@ -176,23 +180,13 @@ class Source(AbstractProxy):
         except Exception as e:
             self.log(f"Erro ao enviar mensagem: {e}")
 
-    def send_and_receive(self, msg: str, cycle: int) -> None:
-        """
-        Envia uma mensagem e aguarda a resposta.
-
-        Args:
-            msg (str): Mensagem a ser enviada.
-            cycle (int): Ciclo atual de envio.
-        Returns:
-            None
-        """
+    def send_and_receive_to_lb(self, ip: str, port: int, msg: str, cycle: int) -> None:
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect((self.target_ip, self.target_port))
+                s.connect((ip, port))
                 s.sendall(msg.encode())
                 response = s.recv(1024).decode()
-                # Armazena a mensagem recebida
                 self.considered_messages.append(response)
-                self.log(f"Recebido no ciclo {cycle}: {response}")
+                self.log(f"Recebido de {ip}:{port} no ciclo {cycle}: {response}")
         except Exception as e:
-            self.log(f"Erro ao enviar/receber mensagem: {e}")
+            self.log(f"Erro ao enviar/receber mensagem para {ip}:{port}: {e}")
