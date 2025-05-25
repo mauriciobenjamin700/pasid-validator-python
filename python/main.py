@@ -59,6 +59,7 @@ if __name__ == "__main__":
     role = sys.argv[1]
 
     if role == "source":
+        print("INICIO DO SOURCE")
         start_source()
     elif role == "load_balance":
         listen_port = int(sys.argv[2])
@@ -68,6 +69,7 @@ if __name__ == "__main__":
             for s in sys.argv[3].split(","):
                 host, port = s.split(":")
                 services.append((host, int(port)))
+        print("INICIO DO BALANCEADOR DE CARGA")
         start_load_balancer(
             listen_port=listen_port,
             service_addresses=services if services else [("localhost", 3000), ("localhost", 3001)]
@@ -78,6 +80,7 @@ if __name__ == "__main__":
             sys.exit(1)
         port = int(sys.argv[2])
         service_time_ms = float(sys.argv[3])
+        print(f"INICIO DO SERVIÇO NA PORTA {port}")
         start_service(port, service_time_ms)
     else:
         print("Opção desconhecida:", role)

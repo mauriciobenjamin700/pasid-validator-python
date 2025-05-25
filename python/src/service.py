@@ -62,12 +62,15 @@ class Service(AbstractProxy):
         # Verifica se a mensagem é "ping"
         if data == "ping":
             if self.queue.full():
+                print(f"Queue is full {self.queue.maxsize / self.max_queue_size} messages")
                 client_sock.sendall("busy".encode())
             else:
+                print(f"Queue is free {self.queue.maxsize / self.max_queue_size} messages")
                 client_sock.sendall("free".encode())
             client_sock.close()
             return
         if self.queue.full():
+            print(f"Queue is full {self.queue.maxsize / self.max_queue_size} messages")
             client_sock.sendall("busy".encode())
             client_sock.close()
             return

@@ -64,13 +64,13 @@ class LoadBalancer(AbstractProxy):
         """
         try:
             data = client_sock.recv(1024).decode()
-            if data.startswith("config;"):
-                # Exemplo: config;localhost:3000,localhost:3001
-                services = data.split(";")[1].split(",")
-                self.service_addresses = [(addr.split(":")[0], int(addr.split(":")[1])) for addr in services]
-                client_sock.sendall("ok".encode())
-                client_sock.close()
-                return
+            # if data.startswith("config;"):
+            #     # Exemplo: config;localhost:3000,localhost:3001
+            #     services = data.split(";")[1].split(",")
+            #     self.service_addresses = [(addr.split(":")[0], int(addr.split(":")[1])) for addr in services]
+            #     client_sock.sendall("ok".encode())
+            #     client_sock.close()
+            #     return
             
             # Adiciona timestamp de chegada à mensagem
             data = add_timestamp_to_message(data)
@@ -82,14 +82,13 @@ class LoadBalancer(AbstractProxy):
                 # Verifica se o service está livre
                 if self.is_service_free(ip, port):
 
-                    # Adiciona o timestamp de envio à mensagem
-                    data = add_timestamp_to_message(data)
-
                     # Envia a mensagem para o service
                     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         s.connect((ip, port))
                         s.sendall(data.encode())
                         response = s.recv(1024)
+                    # Adiciona o timestamp de envio à mensagem
+                    data = add_timestamp_to_message(data)
                     client_sock.sendall(response)
                     break
             else:

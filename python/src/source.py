@@ -57,10 +57,12 @@ class Source(AbstractProxy):
         self.qtd_services: List[int] = config.get("qtd_services", [])
         self.cycles_completed: List[bool] = [False] * len(self.qtd_services)
         self.dropp_count: int = 0
-        self.target_ip: str = config.get("target_ip", "localhost")
-        self.target_port: int = config.get("target_port", 2000)
-        self.loadbalancer_addresses = config.get('loadbalancer_addresses', [])
-
+        self.loadbalancer_addresses = config.get("loadbalancer_addresses", "")
+        if isinstance(self.loadbalancer_addresses, str):
+            self.loadbalancer_addresses = [
+                (address.split(":")[0], int(address.split(":")[1]))
+                for address in self.loadbalancer_addresses.split(",")
+            ]
 
     def run(self) -> None:
         """
