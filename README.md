@@ -119,7 +119,7 @@ Estes são os tempos que você pode usar para gerar gráficos de desempenho.
 ## ESPECIFICAÇÃO DO TRABALHO
 
 - **ENTREGA 01- CÓDIGO:** Vocês deverão fazer o PASID-VALIDATOR versão com código em Python.
-- **ENTREGA 02 – EXPERIMENTOS:** Vão executar experimentos usando os componentes em docker containers (1 SOURCE, 2 LOAD BALANCERS). Na parte do Service deverão colocar um código de um serviço real, de preferência com IA e que seja pesado. Deverá ter gráficos de linha sobre o MRT, você pode mudar fatores (linhas) como tipo de serviço e quantidade de services, considerando o x sendo taxa de geração que é mais comum em artigos. Aqui exemplo só pra ter uma base do visual dos gráficos `https://www.overleaf.com/read/zvrngyctpknz#010027`
+- **ENTREGA 02 – EXPERIMENTOS:** Vão executar experimentos usando os componentes em docker containers (1 SOURCE, 2 LOAD BALANCERS). Na parte do Service deverão colocar um código de um serviço real, de preferência com IA e que seja pesado. Deverá ter gráficos de linha sobre o MRT, você pode mudar fatores (linhas) como tipo de serviço e quantidade de services, considerando o x sendo taxa de geração que é mais comum em artigos. Aqui exemplo só pra ter uma base do visual dos gráficos [https://www.overleaf.com/read/zvrngyctpknz#010027](https://www.overleaf.com/read/zvrngyctpknz#010027)
 - **ENTREGA 03 - ARTIGO:** Escreverão um artigo explorando o experimento realizado, mínimo 8 páginas template Latex da IEEE.
 
 ![scherdule](./images/scherdule.png)
