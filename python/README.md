@@ -1,32 +1,45 @@
 # PASID Validator Python
 
-Este projeto replica em Python um sistema distribuído para validação experimental de modelos de desempenho, inspirado em uma arquitetura Java. O sistema é composto por três componentes principais: **Source**, **LoadBalancer** e **Service**, que se comunicam via sockets TCP para simular o envio, balanceamento e processamento de requisições.
+Este projeto implementa em Python um sistema distribuído para validação experimental de modelos de desempenho, inspirado em uma arquitetura Java. O sistema é composto por três componentes principais: **Source**, **LoadBalancer** e **Service**, que se comunicam via sockets TCP para simular o envio, balanceamento e processamento de requisições.
 
 ## Estrutura do Projeto
 
 ```bash
 python/
-└── src/
-    ├── main.py           # Script principal para iniciar cada componente
-    ├── source.py         # Componente gerador de requisições
-    ├── load_balancer.py  # Balanceador de carga (round-robin)
-    ├── service.py        # Serviço que processa requisições
-    ├── config.py         # Carregamento de configurações (.ini)
-    ├── utils.py          # Funções utilitárias (MRT, etc)
-    └── configs/
-        ├── source.ini
-        ├── loadbalancer1.ini
-        └── service1.ini
+├── docker-compose.yaml        # Orquestração dos containers Docker
+├── Dockerfile                 # Dockerfile para build da imagem
+├── log.txt                    # Log de execução
+├── main.py                    # Script principal para iniciar componentes
+├── Makefile                   # Comandos utilitários
+├── pyproject.toml             # Configuração de dependências (opcional)
+├── requirements.txt           # Dependências Python
+├── src/
+│   ├── abstract_proxy.py      # Classe base para proxies
+│   ├── base.py                # Base de componentes
+│   ├── config.py              # Carregamento de configurações (.ini)
+│   ├── ia.py                  # (Opcional) Lógica de IA
+│   ├── load_balance.py        # Balanceador de carga (round-robin)
+│   ├── service.py             # Serviço que processa requisições
+│   ├── source.py              # Gerador de requisições
+│   ├── utils.py               # Funções utilitárias (MRT, etc)
+│   └── configs/
+│       ├── source.ini
+│       ├── loadbalancer1.ini
+│       └── service1.ini
 ```
 
 ## Pré-requisitos
 
 - Python 3.8+
-- Instale as dependências (se houver) com:
+- Docker e Docker Compose (recomendado para execução simplificada)
 
-  ```bash
-  pip install -r requirements.txt
-  ```
+### Instalação manual (sem Docker)
+
+Instale as dependências:
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Configuração
 
@@ -50,17 +63,44 @@ variatedServerLoadBalancerPort = 3000
 qtdServices = 1,2
 ```
 
+## Execução com Docker
+
+A forma mais simples de rodar o sistema é via Docker Compose. Isso garante que todos os componentes sejam executados em containers isolados, facilitando a configuração e execução.
+
+1. Certifique-se de ter o Docker e o Docker Compose instalados.
+2. No diretório `python/`, execute:
+
+```bash
+docker compose up --build
+```
+
+Os logs dos componentes aparecerão no terminal. Para parar, use `Ctrl+C` e depois:
+
+```bash
+docker compose down
+```
+
+## Execução manual (sem Docker)
+
+Você pode rodar cada componente separadamente, em diferentes terminais:
+
+```bash
+python src/source.py
+python src/load_balance.py
+python src/service.py
+```
+
+Ajuste as configurações de IP/porta conforme necessário nos arquivos `.ini`.
+
 ## Resultados
 
-As mensagens entre os componentes gerará este resultado, onde cada componente adiciona seu timestamp ao final.
+As mensagens entre os componentes geram um resultado onde cada componente adiciona seu timestamp ao final:
 
 ```bash
 ciclo;id;T_envio;T_chegada_LB;T_saida_LB;T_chegada_SRV;T_saida_SRV
 ```
 
-## Como Executar
-
-Use ``docker compose up --build` e aguarde os logs para ver os resultados
+O arquivo `log.txt` guarda os resultados do experimento
 
 ## Fluxo do Sistema
 
