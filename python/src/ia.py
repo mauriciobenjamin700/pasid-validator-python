@@ -1,16 +1,12 @@
-from ollama import ChatResponse, Client
+from decouple import config
+from groq import Groq
+
+GROQ_API_KEY = config("GROQ_API_KEY", default=None)
 
 class IAService:
     
     def __init__(self):
-        self.models = {
-            "llama3.2": "llama3.2",
-            "deep-seek": "DeepSeek-R1"
-        }
-        self.model = self.models["llama3.2"]  # Default model
-        self.client = Client(
-            host="http://ollama:11434"
-        )
+        self.client = Groq(api_key=GROQ_API_KEY)
         
     
     def ask(self, prompt: str) -> str:
@@ -23,6 +19,9 @@ class IAService:
         Returns:
             str: The response from the IA model.
         """
-        ia_response:ChatResponse = self.client.chat(model=self.model, messages=[{"role": "user", "content": prompt}])
+        chat = self.client.chat.completions.create(
+            model="llama-3.3-70b-versatile", 
+            messages=[{"role": "user", "content": prompt}]
+        )
         
-        return ia_response.message.content
+        return chat.choices[0].message.content.strip().replace('*', '')

@@ -1,5 +1,4 @@
 start:
-	@cd python
 	@docker compose up -d --build
 	@cd ..
 
