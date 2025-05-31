@@ -23,17 +23,17 @@ def load_config() -> Dict[str, Any]:
         'loadbalancers': [
             {
                 'name': 'Server1',
-                'port': 2000,
+                'port': 3000,
                 'queue_max_size': 100,
                 'qtd_services': 4,
             },
             {
                 'name': 'Server2',
-                'port': 2100,
+                'port': 3100,
                 'queue_max_size': 100,
                 'qtd_services': 4,
             }
         ],
         # Endereços dos loadbalancers em formato string, se necessário
-        'loadbalancer_addresses': "loadbalance1:2000,loadbalance2:2100",
+        'loadbalancer_addresses': "loadbalance1:3000,loadbalance2:3100",
     }

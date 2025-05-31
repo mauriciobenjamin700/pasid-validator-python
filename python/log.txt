@@ -1,49 +1,17 @@
-Starting source
-Configuring load balancer loadbalance1:2000 with 1 services
-Recebido de loadbalance1:2000 no ciclo 0: busy
-Recebido de loadbalance2:2100 no ciclo 0: busy
-Configuring load balancer loadbalance1:2000 with 1 services
-Recebido de loadbalance1:2000 no ciclo 0: busy
-Recebido de loadbalance2:2100 no ciclo 0: busy
-Configuring load balancer loadbalance1:2000 with 1 services
-Recebido de loadbalance1:2000 no ciclo 0: busy
-Recebido de loadbalance2:2100 no ciclo 0: busy
-Configuring load balancer loadbalance1:2000 with 1 services
-Recebido de loadbalance1:2000 no ciclo 0: busy
-Recebido de loadbalance2:2100 no ciclo 0: busy
-Configuring load balancer loadbalance1:2000 with 1 services
-Recebido de loadbalance1:2000 no ciclo 0: busy
-Recebido de loadbalance2:2100 no ciclo 0: busy
+Recebido de loadbalance1:3000 no ciclo 0: 0;1;1748719323.799069;1748719323.79997;1748719323.801813;1748719384.924112
+Recebido de loadbalance1:3000 no ciclo 0: 0;5;1748719327.808254;1748719327.810035;1748719327.813641;1748719385.023094
+Recebido de loadbalance1:3000 no ciclo 0: 0;9;1748719331.820471;1748719331.821726;1748719331.823925;1748719385.179062
+Recebido de loadbalance2:3100 no ciclo 0: 0;8;1748719330.816984;1748719330.818761;1748719330.822263;1748719385.28203
+Recebido de loadbalance2:3100 no ciclo 0: 0;6;1748719328.8104;1748719328.812067;1748719328.815378;1748719385.378345
+Recebido de loadbalance1:3000 no ciclo 0: 0;3;1748719325.803676;1748719325.80548;1748719325.80864;1748719385.432584
+Recebido de loadbalance2:3100 no ciclo 0: 0;10;1748719332.822458;1748719332.824295;1748719332.827769;1748719385.680838
+Recebido de loadbalance2:3100 no ciclo 0: 0;4;1748719326.805865;1748719326.807757;1748719326.811332;1748719386.168381
+Recebido de loadbalance1:3000 no ciclo 0: 0;7;1748719329.813372;1748719329.816652;1748719329.824807;1748719389.137316
+Recebido de loadbalance2:3100 no ciclo 0: 0;2;1748719324.801201;1748719324.803213;1748719324.808332;1748719389.398934
 Ciclo 0 finalizado.
-Configuring load balancer loadbalance1:2000 with 2 services
-Recebido de loadbalance1:2000 no ciclo 1: busy
-Recebido de loadbalance2:2100 no ciclo 1: busy
-Configuring load balancer loadbalance1:2000 with 2 services
-Recebido de loadbalance1:2000 no ciclo 1: busy
-Recebido de loadbalance2:2100 no ciclo 1: busy
-Configuring load balancer loadbalance1:2000 with 2 services
-Recebido de loadbalance1:2000 no ciclo 1: busy
-Recebido de loadbalance2:2100 no ciclo 1: busy
-Configuring load balancer loadbalance1:2000 with 2 services
-Recebido de loadbalance1:2000 no ciclo 1: busy
-Recebido de loadbalance2:2100 no ciclo 1: busy
-Configuring load balancer loadbalance1:2000 with 2 services
-Recebido de loadbalance1:2000 no ciclo 1: busy
-Recebido de loadbalance2:2100 no ciclo 1: busy
-Ciclo 1 finalizado.
-Configuring load balancer loadbalance1:2000 with 4 services
-Recebido de loadbalance1:2000 no ciclo 2: busy
-Recebido de loadbalance2:2100 no ciclo 2: busy
-Configuring load balancer loadbalance1:2000 with 4 services
-Recebido de loadbalance1:2000 no ciclo 2: busy
-Recebido de loadbalance2:2100 no ciclo 2: busy
-Configuring load balancer loadbalance1:2000 with 4 services
-Recebido de loadbalance1:2000 no ciclo 2: busy
-Recebido de loadbalance2:2100 no ciclo 2: busy
-Configuring load balancer loadbalance1:2000 with 4 services
-Recebido de loadbalance1:2000 no ciclo 2: busy
-Recebido de loadbalance2:2100 no ciclo 2: busy
-Configuring load balancer loadbalance1:2000 with 4 services
-Recebido de loadbalance1:2000 no ciclo 2: busy
-Recebido de loadbalance2:2100 no ciclo 2: busy
-Ciclo 2 finalizado.
+Recebido de loadbalance1:3000 no ciclo 1: 
+Recebido de loadbalance2:3100 no ciclo 1: 
+Recebido de loadbalance1:3000 no ciclo 1: 
+Recebido de loadbalance2:3100 no ciclo 1: 
+Recebido de loadbalance1:3000 no ciclo 1: 
+Recebido de loadbalance2:3100 no ciclo 1: 

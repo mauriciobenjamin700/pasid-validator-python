@@ -27,7 +27,7 @@ def start_source():
 
     source.sys_log("Source finished sending messages.")
 
-def start_load_balancer(
+def start_load_balance(
     listen_port: int = 2000,
     service_addresses: list[tuple[str, int]] = [
         ("localhost", 3000), 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     proxy = AbstractProxy()
 
     if len(sys.argv) < 2:
-        proxy.sys_log("Uso: python main.py [source|load_balancer|service] [args...]")
+        proxy.sys_log("Uso: python main.py [source|load_balance|service] [args...]")
         sys.exit(1)
 
     role = sys.argv[1]
@@ -78,9 +78,11 @@ if __name__ == "__main__":
             for s in sys.argv[3].split(","):
                 host, port = s.split(":")
                 services.append((host, int(port)))
-        start_load_balancer(
+        if not services:
+            raise ValueError("Nenhum serviço fornecido. Use o formato host:port,host:port,...")
+        start_load_balance(
             listen_port=listen_port,
-            service_addresses=services if services else [("localhost", 3000), ("localhost", 3001)]
+            service_addresses=services
             )
     elif role == "service":
         proxy.sys_log("Iniciando Service")

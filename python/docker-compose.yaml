@@ -15,10 +15,10 @@ services:
 
   loadbalance1:
     build: .
-    command: python main.py load_balance 2000 "service1:3001,service2:3002,service3:3003,service4:3004"
+    command: python main.py load_balance 3000 "service1:3001,service2:3002,service3:3003,service4:3004"
     container_name: loadbalance1
     ports:
-      - "2000:2000"
+      - "3000:3000"
     depends_on:
       - service1
       - service2
@@ -29,15 +29,15 @@ services:
 
   loadbalance2:
     build: .
-    command: python main.py load_balance 2100 "service10:3100,service11:3101,service12:3102,service13:3103"
+    command: python main.py load_balance 3100 "service11:3101,service12:3102,service13:3103,service14:3104"
     container_name: loadbalance2
     ports:
-      - "2100:2100"
+      - "3100:3100"
     depends_on:
-      - service10
       - service11
       - service12
       - service13
+      - service14
     networks:
       - pasidnet
 
@@ -78,15 +78,6 @@ services:
       - "3004:3004"
 
 
-  service10:
-    build: .
-    command: python main.py service 3100 100
-    container_name: service10
-    networks:
-      - pasidnet
-    ports:
-      - "3100:3100"
-
   service11:
     build: .
     command: python main.py service 3101 100
@@ -113,6 +104,15 @@ services:
       - pasidnet
     ports:
       - "3103:3103"
+
+  service14:
+    build: .
+    command: python main.py service 3104 100
+    container_name: service14
+    networks:
+      - pasidnet
+    ports:
+      - "3104:3104"
 
 networks:
   pasidnet:
