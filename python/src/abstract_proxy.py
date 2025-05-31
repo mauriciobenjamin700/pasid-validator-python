@@ -14,15 +14,22 @@ class AbstractProxy:
         init_log_file(): Inicializa o arquivo de log, limpando seu conteúdo.
         log(message: str): Registra uma mensagem no log e no console.
     """
-    def __init__(self, log_file="log.txt"):
-        self.log_file = log_file
+    def __init__(self):
+        self.log_file = "log.txt"
+        self.sys_log_file = "sys_log.txt"
         self.init_log_file()
 
     def init_log_file(self):
         with open(self.log_file, 'w') as f:
             f.write("")
+        
+        with open(self.sys_log_file, 'w') as f:
+            f.write("")
 
     def log(self, message: str):
-        print(message)
         with open(self.log_file, 'a') as f:
+            f.write(message + "\n")
+
+    def sys_log(self, message: str):
+        with open(self.sys_log_file, 'a') as f:
             f.write(message + "\n")

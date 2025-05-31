@@ -11,66 +11,108 @@ services:
       - pasidnet
     volumes:
       - ./log.txt:/app/log.txt
+      - ./sys_log.txt:/app/sys_log.txt
 
   loadbalance1:
     build: .
-    command: python main.py load_balance 2000 "service1:3000,service2:3001"
+    command: python main.py load_balance 2000 "service1:3001,service2:3002,service3:3003,service4:3004"
     container_name: loadbalance1
     ports:
       - "2000:2000"
     depends_on:
       - service1
       - service2
-    networks:
-      - pasidnet
-
-  loadbalance2:
-    build: .
-    command: python main.py load_balance 2100 "service3:3100,service4:3101"
-    container_name: loadbalance2
-    ports:
-      - "2100:2100"
-    depends_on:
       - service3
       - service4
     networks:
       - pasidnet
 
-  service1:
+  loadbalance2:
     build: .
-    command: python main.py service 3000 100
-    container_name: service1
+    command: python main.py load_balance 2100 "service10:3100,service11:3101,service12:3102,service13:3103"
+    container_name: loadbalance2
+    ports:
+      - "2100:2100"
+    depends_on:
+      - service10
+      - service11
+      - service12
+      - service13
     networks:
       - pasidnet
-    ports:
-      - "3000:3000"
 
-  service2:
+  service1:
     build: .
     command: python main.py service 3001 100
-    container_name: service2
+    container_name: service1
     networks:
       - pasidnet
     ports:
       - "3001:3001"
 
+  service2:
+    build: .
+    command: python main.py service 3002 100
+    container_name: service2
+    networks:
+      - pasidnet
+    ports:
+      - "3002:3002"
+
   service3:
     build: .
-    command: python main.py service 3100 100
+    command: python main.py service 3003 100
     container_name: service3
+    networks:
+      - pasidnet
+    ports:
+      - "3003:3003"
+
+  service4:
+    build: .
+    command: python main.py service 3004 100
+    container_name: service4
+    networks:
+      - pasidnet
+    ports:
+      - "3004:3004"
+
+
+  service10:
+    build: .
+    command: python main.py service 3100 100
+    container_name: service10
     networks:
       - pasidnet
     ports:
       - "3100:3100"
 
-  service4:
+  service11:
     build: .
     command: python main.py service 3101 100
-    container_name: service4
+    container_name: service11
     networks:
       - pasidnet
     ports:
       - "3101:3101"
+
+  service12:
+    build: .
+    command: python main.py service 3102 100
+    container_name: service12
+    networks:
+      - pasidnet
+    ports:
+      - "3102:3102"
+
+  service13:
+    build: .
+    command: python main.py service 3103 100
+    container_name: service13
+    networks:
+      - pasidnet
+    ports:
+      - "3103:3103"
 
 networks:
   pasidnet:

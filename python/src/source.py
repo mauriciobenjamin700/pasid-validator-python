@@ -48,7 +48,7 @@ class Source(AbstractProxy):
     """
 
     def __init__(self, config: Dict[str, Any]) -> None:
-        super().__init__(config.get("log_file", "log.txt"))
+        super().__init__()
         self.model_feeding_stage: bool = config.get("model_feeding_stage", False)
         self.arrival_delay: int = config.get("arrival_delay", 0)
         self.max_considered_messages_expected: int = config.get("max_considered_messages_expected", 10)
@@ -138,7 +138,13 @@ class Source(AbstractProxy):
                 lb_ip, lb_port = self.loadbalancer_addresses[i % num_balancers]
 
                 # Configuração: envie para o load balancer correspondente
-                config_message = "config;" + ",".join([f"{lb_ip}:{3000 + j}" for j in range(qts)])
+                # TODO: GAMBIARRA A SER MELHORADA
+                if i % num_balancers == 0:
+                    self.log(f"Configuring load balancer {lb_ip}:{lb_port} with {qts} services")
+                    config_message = "config;" + ",".join([f"{lb_ip}:{3001 + j}" for j in range(qts)])
+                else:
+                    config_message = "config;" + ",".join([f"{lb_ip}:{3100 + j}" for j in range(qts)])
+
                 self.send_message_to_configure_server(config_message, lb_ip, lb_port)
 
                 msg = f"{cycle};{self.source_current_index_message};{get_current_timestamp()}"

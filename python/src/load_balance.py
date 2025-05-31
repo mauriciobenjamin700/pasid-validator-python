@@ -22,6 +22,7 @@ class LoadBalancer(AbstractProxy):
         None
     """
     def __init__(self, listen_port: int, service_addresses: List[tuple]):
+        super().__init__()
         self.listen_port = listen_port
         self.service_addresses = service_addresses
         self.current = 0
@@ -43,7 +44,7 @@ class LoadBalancer(AbstractProxy):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind(('0.0.0.0', self.listen_port))
         server.listen()
-        print(f"LoadBalancer listening on port {self.listen_port}")
+        self.sys_log(f"LoadBalancer listening on port {self.listen_port}")
         while True:
             client_sock, _ = server.accept()
             threading.Thread(target=self.handle_client, args=(client_sock,)).start()
@@ -64,13 +65,16 @@ class LoadBalancer(AbstractProxy):
         """
         try:
             data = client_sock.recv(1024).decode()
-            # if data.startswith("config;"):
-            #     # Exemplo: config;localhost:3000,localhost:3001
-            #     services = data.split(";")[1].split(",")
-            #     self.service_addresses = [(addr.split(":")[0], int(addr.split(":")[1])) for addr in services]
-            #     client_sock.sendall("ok".encode())
-            #     client_sock.close()
-            #     return
+            # TODO: SE EU DESCOMENTAR ESTA LINHA, O SERVIÇO DE ORIGEM NÃO CONSEGUE ENVIAR MENSAGENS
+            if data.startswith("config;"):
+                # Exemplo: config;localhost:3000,localhost:3001
+                self.sys_log(f"CONFIGURAÇÃO RECEBIDA: {data}")
+                services = data.split(";")[1].split(",")
+                self.service_addresses = [(addr.split(":")[0], int(addr.split(":")[1])) for addr in services]
+                self.sys_log(f"Updated service addresses: {self.service_addresses}")
+                client_sock.sendall("ok".encode())
+                client_sock.close()
+                return
             
             # Adiciona timestamp de chegada à mensagem
             data = add_timestamp_to_message(data)

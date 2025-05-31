@@ -20,6 +20,7 @@ class Service(AbstractProxy):
         None
     """
     def __init__(self, listen_port: int, service_time_ms: float, max_queue_size: int = 10):
+        super().__init__()
         self.listen_port = listen_port
         self.service_time_ms = service_time_ms
         self.queue = Queue()
@@ -40,7 +41,7 @@ class Service(AbstractProxy):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind(('0.0.0.0', self.listen_port))
         server.listen()
-        print(f"Service listening on port {self.listen_port}")
+        self.sys_log(f"Service listening on port {self.listen_port}")
         while True:
             # Aceita conexões de clientes
             client_sock, _ = server.accept()
@@ -59,7 +60,7 @@ class Service(AbstractProxy):
         """
         data = client_sock.recv(1024).decode()
 
-        print(f"Received message: {data}")
+        self.sys_log(f"{client_sock.getsockname()} Received message: {data}")
         
         # Verifica se a mensagem é "ping"
         if data == "ping":
