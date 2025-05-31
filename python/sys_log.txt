@@ -48,3 +48,27 @@ Sending message to load balancer loadbalance1:3000 in cycle 1
 Sending config message to loadbalance1:3000: config;service1:3001,service2:3002
 Sending message to load balancer loadbalance2:3100 in cycle 1
 Sending config message to loadbalance2:3100: config;service11:3101,service12:3102
+Load Balances available: [('loadbalance1', 3000), ('loadbalance2', 3100)]
+Starting cycle 2 with 4 services
+Max considered messages expected: 10
+Sending message to load balancer loadbalance1:3000 in cycle 2
+Sending config message to loadbalance1:3000: config;service1:3001,service2:3002,service3:3003
+Sending message to load balancer loadbalance2:3100 in cycle 2
+Sending config message to loadbalance2:3100: config;service11:3101,service12:3102,service13:3103
+Sending message to load balancer loadbalance1:3000 in cycle 2
+Sending config message to loadbalance1:3000: config;service1:3001,service2:3002,service3:3003
+Sending message to load balancer loadbalance2:3100 in cycle 2
+Sending config message to loadbalance2:3100: config;service11:3101,service12:3102,service13:3103
+Sending message to load balancer loadbalance1:3000 in cycle 2
+Sending config message to loadbalance1:3000: config;service1:3001,service2:3002,service3:3003
+Sending message to load balancer loadbalance2:3100 in cycle 2
+Sending config message to loadbalance2:3100: config;service11:3101,service12:3102,service13:3103
+Sending message to load balancer loadbalance1:3000 in cycle 2
+Sending config message to loadbalance1:3000: config;service1:3001,service2:3002,service3:3003
+Sending message to load balancer loadbalance2:3100 in cycle 2
+Sending config message to loadbalance2:3100: config;service11:3101,service12:3102,service13:3103
+Sending message to load balancer loadbalance1:3000 in cycle 2
+Sending config message to loadbalance1:3000: config;service1:3001,service2:3002,service3:3003
+Sending message to load balancer loadbalance2:3100 in cycle 2
+Sending config message to loadbalance2:3100: config;service11:3101,service12:3102,service13:3103
+Source finished sending messages.

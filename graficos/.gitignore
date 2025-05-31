@@ -1,0 +1,9 @@
+
+# Arquivos do ambiente virtual
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
