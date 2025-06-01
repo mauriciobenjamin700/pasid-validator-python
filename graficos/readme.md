@@ -1,12 +1,15 @@
-
 # Análise de Desempenho de Load Balancers
 
+Explicaremos os gráficos gerados pelo código Python que processa o arquivo `logs_convertidos.csv`.
+
 ## Introdução
-Vou explicar os gráficos gerados pelo código Python que processa o arquivo `logs_convertidos.csv`. O script realiza nove análises e gera vários gráficos na pasta `analises_desempenho`. Cada gráfico visualiza diferentes aspectos do desempenho dos load balancers (`loadbalance1` e `loadbalance2`) ao longo de três ciclos (0, 1, 2). Como o código não exibe os gráficos interativamente (usa `plt.savefig()` e `plt.close()`), descreverei o que cada um representa, com base no CSV fornecido e no comportamento do código. Os tempos são calculados em milissegundos (ms), e os timestamps (T1 a T4) representam etapas no processamento das requisições.
+
+O script realiza nove análises e gera vários gráficos na pasta `analises_desempenho`. Cada gráfico visualiza diferentes aspectos do desempenho dos load balancers (`loadbalance1` e `loadbalance2`) ao longo de três ciclos (0, 1, 2).
 
 ## Análise 1: Distribuição de Tempos por Etapa (por LoadBalancer)
 
 ### 1. Gráficos de Linha por Ciclo (`grafico_linha_ciclo{ciclo}.png`)
+
 - **Descrição**: Um gráfico de linha é gerado para cada ciclo (0, 1, 2), totalizando três arquivos: `grafico_linha_ciclo0.png`, `grafico_linha_ciclo1.png`, e `grafico_linha_ciclo2.png`.
 - **Eixos**:
   - **X**: Etapas (`T1->T2`, `T2->T3`, `T3->T4`, `Tempo Total (T1->T4)`).
@@ -19,6 +22,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 - **Objetivo**: Comparar o desempenho médio das etapas entre os load balancers em cada ciclo.
 
 ### 2. Gráfico de Comparação entre Ciclos (`grafico_comparacao_ciclos_etapas.png`)
+
 - **Descrição**: Um gráfico de linha comparando os tempos médios das etapas entre os ciclos.
 - **Eixos**:
   - **X**: Etapas (`T1->T2`, `T2->T3`, `T3->T4`, `Tempo Total (T1->T4)`).
@@ -30,6 +34,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 - **Objetivo**: Mostrar como o desempenho varia entre os ciclos, destacando que o Ciclo 2 teve um desempenho significativamente pior.
 
 ### 3. Boxplots por Etapa (`boxplot_T1_T2_por_lb.png`, `boxplot_T2_T3_por_lb.png`, `boxplot_T3_T4_por_lb.png`)
+
 - **Descrição**: Três boxplots, um para cada etapa (`T1->T2`, `T2->T3`, `T3->T4`), comparando a distribuição dos tempos entre os load balancers.
 - **Eixos**:
   - **X**: LoadBalancer (`loadbalance1`, `loadbalance2`).
@@ -43,6 +48,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 2: Requisições ao Longo do Tempo
 
 ### 4. Frequência de Requisições ao Longo do Tempo (`grafico_reqs_ao_longo_do_tempo.png`)
+
 - **Descrição**: Um gráfico de linha mostrando a frequência de requisições por segundo, com base no timestamp `T1`.
 - **Eixos**:
   - **X**: Tempo (convertido de `T1` para datetime, cobrindo o intervalo dos dados).
@@ -54,6 +60,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 - **Objetivo**: Mostrar a taxa de chegada das requisições ao longo do tempo.
 
 ### 5. Frequência de Requisições por Ciclo (`grafico_reqs_ao_longo_do_tempo_por_ciclo.png`)
+
 - **Descrição**: Um gráfico de linha com uma curva para cada ciclo, mostrando a frequência de requisições por segundo.
 - **Eixos**:
   - **X**: Tempo (datetime).
@@ -67,6 +74,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 3: Tempo Total por LoadBalancer e Ciclo
 
 ### 6. Tempo Total Médio por LoadBalancer e Ciclo (`barplot_tempo_total_lb_ciclo.png`)
+
 - **Descrição**: Um gráfico de barras mostrando o tempo total médio (`T1->T4`) por load balancer, com barras separadas por ciclo.
 - **Eixos**:
   - **X**: LoadBalancer (`loadbalance1`, `loadbalance2`).
@@ -79,6 +87,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 - **Objetivo**: Comparar o desempenho médio entre os load balancers e ciclos, destacando o impacto do Ciclo 2.
 
 ### 7. Distribuição do Tempo Total por LoadBalancer (`hist_tempo_total_por_lb_comparativo.png`)
+
 - **Descrição**: Um histograma comparativo dos tempos totais, com curvas de densidade (KDE) sobrepostas.
 - **Eixos**:
   - **X**: Tempo total (ms).
@@ -93,6 +102,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 4: Heatmap de Correlação entre Etapas
 
 ### 8. Heatmap de Correlação (`heatmap_correlacao_etapas.png`)
+
 - **Descrição**: Um mapa de calor (heatmap) mostrando a correlação entre os tempos das etapas (`T1->T2`, `T2->T3`, `T3->T4`).
 - **Eixos**:
   - **X e Y**: Etapas (`T1->T2`, `T2->T3`, `T3->T4`).
@@ -106,6 +116,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 5: Quantidade de Requisições por LoadBalancer por Ciclo
 
 ### 9. Quantidade de Requisições (`barplot_reqs_lb_ciclo.png`)
+
 - **Descrição**: Um gráfico de barras mostrando o número de requisições por load balancer em cada ciclo.
 - **Eixos**:
   - **X**: Ciclo (0, 1, 2).
@@ -121,6 +132,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 6: Diferença de Tempo entre LoadBalancers em Cada Requisição
 
 ### 10. Histograma de Diferenças de Tempo (`hist_diferenca_tempo_lbs_por_id.png`)
+
 - **Descrição**: Um histograma da diferença de tempo total (`loadbalance1 - loadbalance2`) para requisições com o mesmo `Ciclo` e `ID`. **Nota**: Este gráfico pode não ser gerado, pois os IDs não são consistentemente pareados entre os load balancers no CSV.
 - **Eixos**:
   - **X**: Diferença de tempo (ms).
@@ -133,6 +145,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 7: Histograma de Tempos Totais
 
 ### 11. Histograma de Tempos Totais (`hist_tempo_total_geral_por_lb.png`)
+
 - **Descrição**: Um histograma empilhado dos tempos totais por load balancer, com curvas de densidade.
 - **Eixos**:
   - **X**: Tempo total (ms).
@@ -147,6 +160,7 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Análise 9: Diferença de Desempenho entre as Iterações (ID)
 
 ### 12. Desempenho por ID (`lineplot_tempo_total_por_id.png`)
+
 - **Descrição**: Um gráfico de linha mostrando o tempo total por ID, com linhas separadas para cada load balancer.
 - **Eixos**:
   - **X**: ID da requisição (1 a 10).
@@ -161,12 +175,14 @@ Vou explicar os gráficos gerados pelo código Python que processa o arquivo `lo
 ## Resumo e Observações
 
 ### Padrões Gerais
+
 - Os tempos das etapas `T1->T2` e `T2->T3` são muito baixos (1–3 ms), indicando que o processamento inicial é rápido.
 - A etapa `T3->T4` domina o tempo total (3000–33.000 ms), sugerindo que o bottleneck está no backend ou na resposta do servidor.
 - O Ciclo 2 tem desempenho significativamente pior devido a duas requisições (IDs 9 e 10) com tempos de 33 segundos.
 - Não há diferença significativa entre `loadbalance1` e `loadbalance2` na maioria das métricas, indicando balanceamento adequado.
 
 ### Limitações
+
 - A **Análise 6** não produz resultados úteis porque os IDs não estão pareados entre os load balancers.
 - Alguns gráficos (como os histogramas) têm poucos dados (30 requisições), o que pode limitar a visualização de padrões.
 
@@ -177,6 +193,7 @@ Se você precisar de uma explicação mais detalhada sobre um gráfico específi
 Vou explicar cada um dos gráficos fornecidos com base em sua aparência e contexto. Os gráficos parecem ser parte de uma análise de desempenho de dois load balancers (`loadbalance1` e `loadbalance2`) ao longo de diferentes ciclos e etapas de processamento, com tempos medidos em milissegundos (ms) e timestamps em segundos.
 
 ### 1. Distribuição do Tempo Total por LoadBalancer
+
 - **Descrição**: Um histograma empilhado que mostra a distribuição dos tempos totais (`T1->T4`) para cada load balancer.
 - **Eixos**:
   - **X**: Tempo Total (ms), variando de 0 a 35.000 ms.
@@ -189,6 +206,7 @@ Vou explicar cada um dos gráficos fornecidos com base em sua aparência e conte
 - **Interpretação**: O desempenho geral é consistente entre os load balancers, mas `loadbalance1` experimentou algumas requisições com atrasos muito longos, possivelmente devido a problemas no backend.
 
 ### 2. Histograma de Tempos Totais por LoadBalancer
+
 - **Descrição**: Um histograma empilhado com curvas de densidade, comparando os tempos totais de `loadbalance1` e `loadbalance2`.
 - **Eixos**:
   - **X**: Tempo Total (ms), variando de 0 a 35.000 ms.
@@ -200,6 +218,7 @@ Vou explicar cada um dos gráficos fornecidos com base em sua aparência e conte
 - **Interpretação**: Confirma a presença de outliers em `loadbalance1`, sugerindo que esse load balancer pode estar mais suscetível a atrasos ocasionais.
 
 ### 3. Desempenho (Tempo Total) por ID da Requisição
+
 - **Descrição**: Um gráfico de dispersão com intervalos de confiança, mostrando o tempo total por ID de requisição para cada load balancer.
 - **Eixos**:
   - **X**: ID da requisição (1 a 10).
@@ -210,6 +229,7 @@ Vou explicar cada um dos gráficos fornecidos com base em sua aparência e conte
 - **Interpretação**: As requisições com IDs 9 e 10 indicam um problema específico (provavelmente no backend), com `loadbalance1` sendo mais afetado do que `loadbalance2`.
 
 ### 4. Heatmap de Correlação entre Tempos das Etapas
+
 - **Descrição**: Um mapa de calor mostrando a correlação entre os tempos das etapas (`T1->T2`, `T2->T3`, `T3->T4`).
 - **Eixos**:
   - **X e Y**: Etapas (`T1->T2`, `T2->T3`, `T3->T4`).
@@ -222,6 +242,7 @@ Vou explicar cada um dos gráficos fornecidos com base em sua aparência e conte
 - **Interpretação**: Não há forte correlação entre as etapas, sugerindo que os tempos são influenciados por fatores independentes (como o backend em `T3->T4`).
 
 ### 5. Frequência de Requisições por Ciclo (por segundo)
+
 - **Descrição**: Um gráfico de linha mostrando a frequência de requisições por segundo para cada ciclo.
 - **Eixos**:
   - **X**: Tempo (T1), de 19:47:10 a 19:47:40.
@@ -233,6 +254,7 @@ Vou explicar cada um dos gráficos fornecidos com base em sua aparência e conte
 - **Interpretação**: A taxa de chegada de requisições é consistente em todos os ciclos, com cerca de 1 requisição por segundo por ciclo.
 
 ## Resumo Geral
+
 - **Desempenho Consistente**: A maioria das requisições tem tempos totais entre 3000 e 6000 ms, com `loadbalance1` e `loadbalance2` mostrando desempenho semelhante na maioria dos casos.
 - **Outliers**: Requisições com IDs 9 e 10 (Ciclo 2) apresentam tempos extremos (15.000–25.000 ms), especialmente em `loadbalance1` (até 33.000 ms), indicando um problema específico (provavelmente no backend).
 - **Distribuição**: Os histogramas mostram que os tempos totais são concentrados em faixas baixas, com poucos casos de atrasos significativos.

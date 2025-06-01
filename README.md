@@ -149,4 +149,3 @@ Se o código do load balancer está configurado para usar todos os serviços dis
 Se ele lê o valor de qtd_services e ajusta dinamicamente, então ele usará 1 ou 2 conforme o ciclo.
 Para ter certeza absoluta, revise o código do load balancer e veja se ele ajusta a lista de serviços conforme o ciclo, ou se ela é fixa desde o início.
 
-Se quiser, envie o trecho do código do load balancer que faz essa escolha, que eu te explico detalhadamente!
