@@ -48,7 +48,7 @@ class Source(AbstractProxy):
     """
 
     def __init__(self, config: Dict[str, Any]) -> None:
-        super().__init__(config.get("log_file", "log.txt"))
+        super().__init__()
         self.model_feeding_stage: bool = config.get("model_feeding_stage", False)
         self.arrival_delay: int = config.get("arrival_delay", 0)
         self.max_considered_messages_expected: int = config.get("max_considered_messages_expected", 10)
@@ -79,10 +79,13 @@ class Source(AbstractProxy):
         Returns:
             None
         """
-        self.log("Starting source")
+        self.sys_log("Starting source")
         if self.model_feeding_stage:
+            self.sys_log("Model Feeding Stage Enabled")
+            # TODO: FUTURAMENTE DARIA PRA USAR ALGO DE TESTE AQUI
             self.send_message_feeding_stage()
         else:
+            self.sys_log("Validation Stage Enabled")
             self.send_messages_validation_stage()
 
     def send_message_feeding_stage(self) -> None:
@@ -123,22 +126,44 @@ class Source(AbstractProxy):
         Returns:
             None
         """
+        self.sys_log(F"Validation Stage Started: TO {self.qtd_services} services")
         for cycle, qts in enumerate(self.qtd_services):
             self.source_current_index_message = 1
             self.considered_messages.clear()
 
             # Distribui as mensagens entre os load balancers
             num_balancers = len(self.loadbalancer_addresses)
+            self.sys_log("Load Balances available: " + str(self.loadbalancer_addresses))
             start_time = time.time()
-            timeout = 10  # segundos
+            #timeout = 10  # segundos
             threads: list[threading.Thread] = []
-
+            self.sys_log(f"Starting cycle {cycle} with {qts} services")
+            self.sys_log(f"Max considered messages expected: {self.max_considered_messages_expected}")
             for i in range(self.max_considered_messages_expected):
                 # Escolhe o load balancer de forma round-robin
                 lb_ip, lb_port = self.loadbalancer_addresses[i % num_balancers]
+                self.sys_log(f"Sending message to load balancer {lb_ip}:{lb_port} in cycle {cycle}")
+                # TODO: GAMBIARRA DNV, DESGRAAAA
+                if lb_port == 3000:
+                    service_addresses = [
+                        "service1:3001",
+                        "service2:3002",
+                        "service3:3003",
+                        "service4:3004"
+                    ]
+                elif lb_port == 3100:
+                    service_addresses = [
+                        "service11:3101",
+                        "service12:3102",
+                        "service13:3103",
+                        "service14:3104"
+                    ]
+                else:
+                    self.sys_log(f"Unsupported load balancer port: {lb_port}")
+                    raise ValueError(f"Unsupported load balancer port: {lb_port}")
+                config_message = "config;" + ",".join(service_addresses[0:cycle+1])
+                self.sys_log(f"Sending config message to {lb_ip}:{lb_port}: {config_message}")
 
-                # Configuração: envie para o load balancer correspondente
-                config_message = "config;" + ",".join([f"{lb_ip}:{3000 + j}" for j in range(qts)])
                 self.send_message_to_configure_server(config_message, lb_ip, lb_port)
 
                 msg = f"{cycle};{self.source_current_index_message};{get_current_timestamp()}"
@@ -149,7 +174,8 @@ class Source(AbstractProxy):
                 time.sleep(self.arrival_delay / 1000.0)
 
             for t in threads:
-                t.join(timeout=max(0, timeout - (time.time() - start_time)))
+                #t.join(timeout=max(0, timeout - (time.time() - start_time)))
+                t.join()
 
             self.cycles_completed[cycle] = True
             self.log(f"Ciclo {cycle} finalizado.")
