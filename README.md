@@ -126,26 +126,16 @@ Estes são os tempos que você pode usar para gerar gráficos de desempenho.
 
 ## Resultados
 
-O experimento configura a qtd_services = 1,2,4 no source.ini.
+O experimento configura a qtd_services = 1,2,4. Isso significa que o primeiro ciclo (ciclo 0) é executado com 1 serviço e o segundo ciclo (ciclo 1) com 2 serviços e o terceiro ciclo (ciclo2) é executado com 4 serviços
 
-Isso significa que o primeiro ciclo (ciclo 0) é executado com 1 serviço e o segundo ciclo (ciclo 1) com 2 serviços e o terceiro ciclo (ciclo2) é executado com 4 serviços
-
-Cada ciclo envia 10 mensagens (maxConsideredMessagesExpected = 10). Isso indica que em cada ciclo, as mensagens são distribuídas entre dois load balancers (loadbalance1 e loadbalance2).
-Cada load balancer pode estar conectado a 1 ou mais serviços, dependendo de como está o seu docker-compose.yaml e como o código do load balancer está implementado.
+Cada ciclo envia 10 mensagens (maxConsideredMessagesExpected = 10). Isso indica que em cada ciclo, as mensagens são distribuídas entre dois load balancers (loadbalance1 e loadbalance2). Cada load balancer pode estar conectado a 1 ou mais serviços, dependendo de como está o seu docker-compose.yaml e como o código do load balancer está implementado.
 
 Resumindo:
-No ciclo 0:
-Cada load balancer provavelmente está usando apenas 1 serviço (conforme o valor do ciclo em qtd_services).
-No ciclo 1:
-Cada load balancer está usando 2 serviços (conforme o valor do ciclo em qtd_services).
+
+- **No ciclo 0:** Cada load balancer está usando apenas 1 serviço (conforme o valor do ciclo em qtd_services).
+- **No ciclo 1:** Cada load balancer está usando 2 serviços (conforme o valor do ciclo em qtd_services).
+- **No ciclo 2:** Cada load balancer está usando 4 serviços (conforme o valor do ciclo em qtd_services).
+
 Ou seja:
 
 O número de serviços usados por cada load balancer em cada ciclo é definido pelo valor atual de qtd_services para aquele ciclo.
-Se qtd_services = 1, cada load balancer usa 1 serviço.
-Se qtd_services = 2, cada load balancer usa 2 serviços.
-Como saber exatamente quantos serviços cada load balancer usou?
-Isso depende de como o seu código do load balancer lê e aplica o valor de qtd_services em cada ciclo.
-Se o código do load balancer está configurado para usar todos os serviços disponíveis no docker-compose.yaml, então ele pode estar usando sempre todos, independentemente do ciclo.
-Se ele lê o valor de qtd_services e ajusta dinamicamente, então ele usará 1 ou 2 conforme o ciclo.
-Para ter certeza absoluta, revise o código do load balancer e veja se ele ajusta a lista de serviços conforme o ciclo, ou se ela é fixa desde o início.
-

@@ -2,10 +2,6 @@
 
 Explicaremos os gráficos gerados pelo código Python que processa o arquivo `logs_convertidos.csv`.
 
-Claro! Aqui está uma versão mais organizada e clara da sua introdução:
-
----
-
 ## Introdução
 
 Este script executa nove análises e gera diversos gráficos salvos na pasta `analises_desempenho`. Cada gráfico visa visualizar diferentes aspectos do desempenho dos load balancers (`loadbalance1` e `loadbalance2`) ao longo de três ciclos: 0, 1 e 2.
@@ -26,8 +22,6 @@ Onde:
 * **T3**: Service
 * **T4**: Retorno do Service para o Source
 
----
-
 ## Análise 1: Distribuição de Tempos por Etapa (por LoadBalancer)
 
 ### 1. Gráficos de Linha por Ciclo (`grafico_linha_ciclo{ciclo}.png`)
@@ -43,10 +37,9 @@ Onde:
   - No Ciclo 2, observe que `loadbalance1` e `loadbalance2` têm picos de tempo total (devido a requisições com IDs 9 e 10, que atingem 33 segundos por atrasos no backend).
 - **Objetivo**: Comparar o desempenho médio das etapas entre os load balancers em cada ciclo.
 
-- ![grafico_linha_ciclo0.png](/graficos/analises_desempenho/grafico_linha_ciclo0.png).
-- ![grafico_linha_ciclo1.png](/graficos/analises_desempenho/grafico_linha_ciclo1.png).
-- ![grafico_linha_ciclo2.png](/graficos/analises_desempenho/grafico_linha_ciclo2.png).
-
+![grafico_linha_ciclo0.png](/graficos/analises_desempenho/grafico_linha_ciclo0.png)
+![grafico_linha_ciclo1.png](/graficos/analises_desempenho/grafico_linha_ciclo1.png)
+![grafico_linha_ciclo2.png](/graficos/analises_desempenho/grafico_linha_ciclo2.png)
 
 ### 2. Gráfico de Comparação entre Ciclos (`grafico_comparacao_ciclos_etapas.png`)
 
@@ -59,7 +52,8 @@ Onde:
   - O Ciclo 2 tem tempos totais médios muito maiores (por causa das requisições com IDs 9 e 10, que chegam a 33 segundos).
   - Nos Ciclos 0 e 1, os tempos totais médios estão na faixa de 3800–4000 ms, enquanto no Ciclo 2 sobem para cerca de 8000 ms.
 - **Objetivo**: Mostrar como o desempenho varia entre os ciclos, destacando que o Ciclo 2 teve um desempenho significativamente pior.
-- ![grafico_comparacao_ciclos_etapas.png](/graficos/analises_desempenho/grafico_comparacao_ciclos_etapas.png).
+
+![grafico_comparacao_ciclos_etapas.png](/graficos/analises_desempenho/grafico_comparacao_ciclos_etapas.png)
 
 ### 3. Boxplots por Etapa (`boxplot_T1_T2_por_lb.png`, `boxplot_T2_T3_por_lb.png`, `boxplot_T3_T4_por_lb.png`)
 
@@ -72,9 +66,10 @@ Onde:
   - Para `T3->T4`, há maior dispersão, com tempos variando de 3000 a 8000 ms, e outliers no Ciclo 2 (33 segundos para IDs 9 e 10).
   - Não há diferença significativa entre `loadbalance1` e `loadbalance2` na maioria das etapas.
 - **Objetivo**: Visualizar a dispersão e identificar outliers nos tempos de cada etapa por load balancer.
-- ![boxplot_T1_T2_por_lb.png](/graficos/analises_desempenho/boxplot_T1_T2_por_lb.png).
-- ![boxplot_T2_T3_por_lb.png](/graficos/analises_desempenho/boxplot_T2_T3_por_lb.png).
-- ![boxplot_T3_T4_por_lb.png](/graficos/analises_desempenho/boxplot_T3_T4_por_lb.png).
+
+![boxplot_T1_T2_por_lb.png](/graficos/analises_desempenho/boxplot_T1_T2_por_lb.png)
+![boxplot_T2_T3_por_lb.png](/graficos/analises_desempenho/boxplot_T2_T3_por_lb.png)
+![boxplot_T3_T4_por_lb.png](/graficos/analises_desempenho/boxplot_T3_T4_por_lb.png)
 
 ## Análise 2: Requisições ao Longo do Tempo
 
@@ -89,7 +84,8 @@ Onde:
   - Há picos de 1–2 requisições por segundo, já que as requisições estão espaçadas aproximadamente a cada segundo dentro de cada ciclo.
   - Nos primeiros 10 segundos (Ciclo 0), há 10 requisições, seguidas por 10 no Ciclo 1 (próximos 10 segundos), e 10 no Ciclo 2 (últimos 10 segundos), com algumas pequenas pausas entre os ciclos.
 - **Objetivo**: Mostrar a taxa de chegada das requisições ao longo do tempo.
-- ![grafico_reqs_ao_longo_do_tempo.png](/graficos/analises_desempenho/grafico_reqs_ao_longo_do_tempo.png).
+
+![grafico_reqs_ao_longo_do_tempo.png](/graficos/analises_desempenho/grafico_reqs_ao_longo_do_tempo.png)
 
 ### 5. Frequência de Requisições por Ciclo (`grafico_reqs_ao_longo_do_tempo_por_ciclo.png`)
 
@@ -102,7 +98,8 @@ Onde:
   - O Ciclo 0 (primeiros 10 segundos) e o Ciclo 1 (10–20 segundos) mostram um padrão constante de 1 requisição por segundo.
   - O Ciclo 2 (últimos 10 segundos) também segue esse padrão, mas há uma pequena pausa entre os ciclos.
 - **Objetivo**: Comparar a taxa de requisições entre os ciclos, destacando eventuais diferenças no ritmo.
-- ![grafico_reqs_ao_longo_do_tempo_por_ciclo.png](/graficos/analises_desempenho/grafico_reqs_ao_longo_do_tempo_por_ciclo.png).
+
+![grafico_reqs_ao_longo_do_tempo_por_ciclo.png](/graficos/analises_desempenho/grafico_reqs_ao_longo_do_tempo_por_ciclo.png)
 
 ## Análise 3: Tempo Total por LoadBalancer e Ciclo
 
@@ -118,7 +115,8 @@ Onde:
   - No Ciclo 2, o tempo médio aumenta drasticamente (para cerca de 8000 ms), devido às requisições com IDs 9 e 10 (33 segundos).
   - As barras têm linhas de erro (desvio padrão), mostrando maior variabilidade no Ciclo 2.
 - **Objetivo**: Comparar o desempenho médio entre os load balancers e ciclos, destacando o impacto do Ciclo 2.
-- ![barplot_tempo_lb_ciclo.png](/graficos/analises_desempenho/barplot_tempo_total_lb_ciclo.png).
+
+![barplot_tempo_lb_ciclo.png](/graficos/analises_desempenho/barplot_tempo_total_lb_ciclo.png)
 
 ### 7. Distribuição do Tempo Total por LoadBalancer (`hist_tempo_total_por_lb_comparativo.png`)
 
@@ -132,7 +130,8 @@ Onde:
   - Há um pequeno pico em torno de 33.000 ms (33 segundos) para ambos os load balancers, correspondente às requisições do Ciclo 2 (IDs 9 e 10).
   - As curvas de densidade mostram que os tempos são semelhantes entre os load balancers.
 - **Objetivo**: Mostrar a distribuição dos tempos totais e identificar valores atípicos (outliers).
-- ![hist_tempo_total_por_lb_comparativo.png](/graficos/analises_desempenho/hist_tempo_total_por_lb_comparativo.png).
+
+![hist_tempo_total_por_lb_comparativo.png](/graficos/analises_desempenho/hist_tempo_total_por_lb_comparativo.png)
 
 ## Análise 4: Heatmap de Correlação entre Etapas
 
@@ -147,7 +146,8 @@ Onde:
   - `T3->T4` varia muito (3000–33.000 ms), mas também não apresenta forte correlação com as etapas anteriores, já que os tempos são dominados por fatores externos (como o backend).
   - Os valores de correlação provavelmente estão próximos de 0, indicando pouca relação linear entre as etapas.
 - **Objetivo**: Identificar se há dependências lineares entre os tempos das etapas (neste caso, parece não haver).
-- ![heatmap_correlacao_etapas.png](/graficos/analises_desempenho/heatmap_correlacao_etapas.png).
+
+![heatmap_correlacao_etapas.png](/graficos/analises_desempenho/heatmap_correlacao_etapas.png)
 
 ## Análise 5: Quantidade de Requisições por LoadBalancer por Ciclo
 
@@ -164,7 +164,8 @@ Onde:
   - Ciclo 2: 5 requisições por load balancer (total 10).
   - As barras têm alturas iguais, indicando que a carga foi distribuída uniformemente entre os load balancers.
 - **Objetivo**: Verificar se há desequilíbrio na distribuição de requisições entre os load balancers (neste caso, a distribuição é equilibrada).
-- ![barplot_reqs_lb_ciclo.png](/graficos/analises_desempenho/barplot_reqs_lb_ciclo.png).
+
+![barplot_reqs_lb_ciclo.png](/graficos/analises_desempenho/barplot_reqs_lb_ciclo.png)
 
 ## Análise 6: Diferença de Tempo entre LoadBalancers em Cada Requisição
 
@@ -178,7 +179,8 @@ Onde:
   - No CSV, os IDs (1 a 10) não aparecem consistentemente para ambos os load balancers no mesmo ciclo. Por exemplo, no Ciclo 0, o ID 1 está em `loadbalance1`, mas não em `loadbalance2`.
   - O código verifica isso com `df_pivot_lb.dropna()` e, como não há IDs pareados completos, o gráfico não é gerado, e uma mensagem é exibida: *"Análise 6: Não foi possível calcular a diferença de tempo por ID pareado (nenhum ID comum completo ou dados insuficientes)."*
 - **Objetivo**: Comparar o desempenho entre os load balancers para a mesma requisição (ID). Como os dados não permitem isso, a análise não é aplicável.
-- ![hist_diferenca_tempo_lbs_por_id.png](/graficos/analises_desempenho/hist_diferenca_tempo_lbs_por_id.png).
+
+![hist_diferenca_tempo_lbs_por_id.png](/graficos/analises_desempenho/hist_diferenca_tempo_lbs_por_id.png)
 
 ## Análise 7: Histograma de Tempos Totais
 
@@ -210,7 +212,9 @@ Onde:
   - No Ciclo 2, os IDs 9 e 10 (para ambos os load balancers) disparam para 33.000 ms, criando picos visíveis.
   - O gráfico mostra que os tempos são consistentes dentro de cada ciclo, exceto pelos outliers no Ciclo 2.
 - **Objetivo**: Analisar como o desempenho varia entre as requisições (IDs) e identificar padrões ou anomalias.
-- ![lineplot_tempo_total_id.png](/graficos/analises_desempenho/lineplot_tempo_total_por_id.png).
+
+- ![lineplot_tempo_total_id.png](/graficos/analises_desempenho/lineplot_tempo_total_por_id.png)
+
 ## Resumo e Observações
 
 ### Padrões Gerais
