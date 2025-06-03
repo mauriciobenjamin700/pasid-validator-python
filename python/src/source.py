@@ -108,7 +108,7 @@ class Source(AbstractProxy):
             msg = f"1;{self.source_current_index_message};{get_current_timestamp()}"
             self.send(msg)
             self.source_current_index_message += 1
-            time.sleep(self.arrival_delay / 1000.0)
+            time.sleep(self.arrival_delay)
 
     def send_messages_validation_stage(self) -> None:
         """
@@ -171,7 +171,7 @@ class Source(AbstractProxy):
                 t.start()
                 threads.append(t)
                 self.source_current_index_message += 1
-                time.sleep(self.arrival_delay / 1000.0)
+                time.sleep(self.arrival_delay)
 
             for t in threads:
                 #t.join(timeout=max(0, timeout - (time.time() - start_time)))

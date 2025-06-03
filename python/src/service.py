@@ -86,11 +86,13 @@ class Service(AbstractProxy):
 
         print(f"Processing message: {data}")
 
+        
         print(
             self.ia_service.ask("Por que sistemas distribuídos são complexos?")
         )
-
+        
         # Adiciona timestamp de envio à mensagem
+        #time.sleep(3)
         data = add_timestamp_to_message(data)
 
         print(f"Sending message: {data}")
