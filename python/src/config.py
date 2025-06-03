@@ -17,9 +17,10 @@ def load_config() -> Dict[str, Any]:
         'mrts_from_model': [405597.23, 203892.96],
         'sdvs_from_model': [1245.97, 613.95],
         'qtd_services': [1, 2, 4],
-        'arrival_delay': 1000,
+        'arrival_delay': 0.250, # Tempo de chegada dos clientes em segundos
+        #'arrival_delay_variation': 0.5, # Variação do tempo de chegada dos clientes em segundo
 
-        # Configurações dos LoadBalancers
+        # Configurações do Load Balancer
         'loadbalancers': [
             {
                 'name': 'Server1',
